@@ -58,3 +58,10 @@ def file_view(request):
         "generic_form.html",
         {"form": FileTicketForm(), "title": "File A Ticket"},
     )
+
+
+@login_required
+def ticket_view(request, id):
+    return render(
+        request, "ticket.html", {"ticket": Ticket.objects.filter(id=id).first()}
+    )
