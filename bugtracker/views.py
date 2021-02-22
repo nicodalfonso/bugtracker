@@ -24,6 +24,11 @@ def login_view(request):
     return render(request, "generic_form.html", {"form": LoginForm(), "title": "Login"})
 
 
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("login_page"))
+
+
 @login_required
 def index_view(request):
     return render(request, "index.html")
