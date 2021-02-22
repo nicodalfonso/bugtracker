@@ -3,14 +3,28 @@
 
 <div>
   <h3>New</h3>
+  <ul>
+    {% for ticket in tickets.NEW %}
+    <li>{{ticket.title}}</li>
+    {% endfor %}
+  </ul>
 </div>
 <div>
   <h3>In Progress</h3>
+  {% for ticket in tickets.IN_PROGRESS %}
+  <li>{{ticket.title}}</li>
+  {% endfor %}
 </div>
 <div>
   <h3>Done</h3>
+  {% for ticket in tickets.DONE %}
+  <li>{{ticket.title}}</li>
+  {% endfor %}
 </div>
 <div>
   <h3>Invalid</h3>
+  {% for ticket in tickets.INVALID %}
+  <li>{{ticket.title}}</li>
+  {% endfor %}
 </div>
 {% endblock %}

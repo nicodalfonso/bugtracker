@@ -31,7 +31,13 @@ def logout_view(request):
 
 @login_required
 def index_view(request):
-    return render(request, "index.html")
+    tickets = {
+        "NEW": Ticket.objects.filter(status="NEW"),
+        "IN_PROGRESS": Ticket.objects.filter(status="IN_PROGRESS"),
+        "DONE": Ticket.objects.filter(status="DONE"),
+        "INVALID": Ticket.objects.filter(status="INVALID"),
+    }
+    return render(request, "index.html", {"tickets": tickets})
 
 
 @login_required
