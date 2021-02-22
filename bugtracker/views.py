@@ -1,8 +1,8 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from bugtracker.models import BugHunter
-from bugtracker.forms import LoginForm
+from bugtracker.models import BugHunter, Ticket
+from bugtracker.forms import FileTicketForm, LoginForm
 
 # Create your views here.
 def login_view(request):
@@ -21,10 +21,29 @@ def login_view(request):
 
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse("homepage"))
-    form = LoginForm()
-    return render(request, "generic_form.html", {"form": form})
+    return render(request, "generic_form.html", {"form": LoginForm(), "title": "Login"})
 
 
 @login_required
 def index_view(request):
     return render(request, "index.html")
+
+
+@login_required
+def file_view(request):
+    if request.method == "POST":
+        form = FileTicketForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            filer = BugHunter.objects.filter(username=request.user.username).first()
+            ticket = Ticket.objects.create(
+                title=data["title"], description=data["description"], filed_by=filer
+            )
+            if ticket:
+                return HttpResponseRedirect(reverse("homepage"))
+
+    return render(
+        request,
+        "generic_form.html",
+        {"form": FileTicketForm(), "title": "File A Ticket"},
+    )

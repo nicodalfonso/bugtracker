@@ -19,4 +19,10 @@ from bugtracker.models import BugHunter, Ticket
 
 
 admin.site.register(BugHunter, UserAdmin)
-admin.site.register(Ticket)
+
+
+class TicketAdmin(admin.ModelAdmin):
+    list_display = ["status", "title", "filed_by", "assigned_to", "completed_by"]
+
+
+admin.site.register(Ticket, TicketAdmin)

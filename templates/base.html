@@ -7,7 +7,10 @@
     <title>Bug Tracker</title>
   </head>
   <body>
-    <h1>🪳 Bugtracker!</h1>
+    <nav style="display: flex; align-items: center">
+      <h1 style="flex-grow: 0"><a href="/">🪳 Bugtracker!</h1></a>
+      <div style="display: flex; justify-content: space-evenly; flex-grow: 1"><a href="/file">File Ticket</a> <a href="/logout">Logout</a></div>
+    </nav>
     {% block content %} {% endblock %}
   </body>
 </html>

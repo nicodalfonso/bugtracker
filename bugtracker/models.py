@@ -39,10 +39,14 @@ class Ticket(models.Model):
         BugHunter, related_name="filer", on_delete=models.CASCADE
     )
     assigned_to = models.ForeignKey(
-        BugHunter, related_name="assignee", on_delete=models.CASCADE
+        BugHunter,
+        related_name="assignee",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
     completed_by = models.ForeignKey(
-        BugHunter, related_name="hero", on_delete=models.CASCADE
+        BugHunter, related_name="hero", on_delete=models.CASCADE, null=True, blank=True
     )
 
     STATUS_CHOICES = [
