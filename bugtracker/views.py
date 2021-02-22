@@ -65,3 +65,22 @@ def ticket_view(request, id):
     return render(
         request, "ticket.html", {"ticket": Ticket.objects.filter(id=id).first()}
     )
+
+
+@login_required
+def hunter_view(request, id):
+    hunter = BugHunter.objects.filter(id=id).first()
+    filed = Ticket.objects.filter(filed_by=hunter)
+    print(filed)
+    assigned = Ticket.objects.filter(assigned_to=hunter)
+    completed = Ticket.objects.filter(completed_by=hunter)
+    return render(
+        request,
+        "hunter.html",
+        {
+            "hunter": hunter,
+            "filed": filed,
+            "assigned": assigned,
+            "completed": completed,
+        },
+    )

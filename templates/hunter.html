@@ -1,29 +1,27 @@
 {% extends 'base.html' %} {% block content %}
-<h2>Tickets</h2>
+<h2>{{hunter.username}}</h2>
+<div>
+  <h3>{{hunter.last_name}}, {{hunter.first_name}}</h3>
+  <h3>{{hunter.email}}</h3>
+</div>
 
 <div>
-  <h3>New</h3>
+  <h3>Tickets Filed</h3>
   <ul>
-    {% for ticket in tickets.NEW %}
+    {% for ticket in filed %}
     <li><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></li>
     {% endfor %}
   </ul>
 </div>
 <div>
-  <h3>In Progress</h3>
-  {% for ticket in tickets.IN_PROGRESS %}
+  <h3>Tickets Assigned</h3>
+  {% for ticket in assigned %}
   <li><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></li>
   {% endfor %}
 </div>
 <div>
-  <h3>Done</h3>
-  {% for ticket in tickets.DONE %}
-  <li><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></li>
-  {% endfor %}
-</div>
-<div>
-  <h3>Invalid</h3>
-  {% for ticket in tickets.INVALID %}
+  <h3>Tickets Completed</h3>
+  {% for ticket in completed %}
   <li><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></li>
   {% endfor %}
 </div>

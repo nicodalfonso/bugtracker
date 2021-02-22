@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block content %}
 <h2>{{ticket.title}}</h2>
 <h3>{{ticket.status}}</h3>
-<p>Created by: {{ticket.filed_by}}</p>
+<p>Created by: <a href="/users/{{ticket.filed_by.id}}">{{ticket.filed_by}}</a></p>
 <p>Assigned to: {{ticket.assigned_to}}</p>
 <p>Completed by: {{ticket.completed_by}}</p>
 <div>
