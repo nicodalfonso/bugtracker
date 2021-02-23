@@ -1,30 +1,76 @@
 {% extends 'base.html' %} {% block content %}
-<div>
-  <h2>{{hunter.username}}</h2>
-</div>
-<div>
-  <h3>{{hunter.last_name}}, {{hunter.first_name}}</h3>
-  <h3>{{hunter.email}}</h3>
+<div class="card">
+  <div class="card-header">
+    <h2 class="title card-header-title">{{hunter.username}}</h2>
+  </div>
+
+  <div class="card-content">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <h3 class="subtitle">{{hunter.last_name}}, {{hunter.first_name}}</h3>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <h3 class="subtitle level-item"><a href="mailto:{{hunter.email}}">{{hunter.email}}</a></h3>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div>
-  <h3>Tickets Filed</h3>
-  <ul>
-    {% for ticket in filed %}
-    <li><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></li>
-    {% endfor %}
-  </ul>
-</div>
-<div>
-  <h3>Tickets Assigned</h3>
-  {% for ticket in assigned %}
-  <li><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></li>
-  {% endfor %}
-</div>
-<div>
-  <h3>Tickets Completed</h3>
-  {% for ticket in completed %}
-  <li><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></li>
-  {% endfor %}
-</div>
+<section class="section">
+  <nav class="panel">
+    <p class="panel-heading has-text-centered">Tickets</p>
+    <p class="panel-tabs">
+      <a class="is-active" onclick="toggle(event)">All</a>
+      <a onclick="toggle(event)">Filed</a>
+      <a onclick="toggle(event)">Assigned</a>
+      <a onclick="toggle(event)">Completed</a>
+    </p>
+
+    <div id="tickets">
+      {% for ticket in all %}
+      <a href="/tickets/{{ticket.id}}" class="panel-block" data-status="{{ticket.status}}" data-filedby="{{ticket.filed_by}}">{{ticket.title}}</a>
+      {% endfor %}
+    </div>
+  </nav>
+</section>
+
+<script>
+  const hunter = "{{hunter.username|escapejs}}";
+  const dataHash = {
+    assigned: "IN_PROGRESS",
+    completed: "DONE",
+  };
+
+  const toggle = (e) => {
+    e.preventDefault();
+    const text = e.target.textContent.toLowerCase();
+
+    //switch active link
+    for (item in e.target.parentElement.children) {
+      child = e.target.parentElement.children[item];
+      child == e.target ? (child.className = "is-active") : (child.className = "");
+    }
+
+    //hide tickets in different tabs
+    ticketElems = document.body.querySelector("#tickets").children;
+    for (item in ticketElems) {
+      child = ticketElems[item];
+      //prevent nodes from being modified incorrectly
+      if (typeof child != "object") {
+        break;
+      }
+      console.log(child);
+      console.log(hunter);
+      console.log(child.dataset.filedby);
+      text == "all" || (text == "filed" && child.dataset.filedby == hunter) || dataHash[text] == child.dataset.status
+        ? child.classList.remove("is-hidden")
+        : child.classList.add("is-hidden");
+      console.log(child);
+    }
+  };
+</script>
 {% endblock %}

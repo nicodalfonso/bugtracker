@@ -121,6 +121,7 @@ def hunter_view(request, id):
         "hunter.html",
         {
             "hunter": hunter,
+            "all": {*filed, *assigned, *completed},
             "filed": filed,
             "assigned": assigned,
             "completed": completed,
