@@ -6,7 +6,7 @@
 
 {% if ticket.assigned_to %}
 <a>Assigned to: <a href="/users/{{ticket.assigned_to.id}}">{{ticket.assigned_to}}</a></p>
-{% else %}
+{% elif not ticket.status == "DONE" %}
 <form action="" method="post">
   {% csrf_token %}
   <input type="submit" name="assign" value="Claim Ticket" />
@@ -14,7 +14,7 @@
 {% endif %}
 
 {% if ticket.completed_by %}
-<p>Completed by: <a href="/users/{{ticket.assigned_to.id}}">{{ticket.completed_by}}</a></p>
+<p>Completed by: <a href="/users/{{ticket.completed_by.id}}">{{ticket.completed_by}}</a></p>
 {% elif can_complete %}
 <form action="" method="post">
   {% csrf_token %}

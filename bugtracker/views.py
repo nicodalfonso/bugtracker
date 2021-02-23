@@ -70,6 +70,7 @@ def ticket_view(request, id):
             current_ticket.status = "IN_PROGRESS"
             current_ticket.save()
         elif "complete" in request.POST.keys():
+            current_ticket.assigned_to = None
             current_ticket.completed_by = request.user
             current_ticket.status = "DONE"
             current_ticket.save()
