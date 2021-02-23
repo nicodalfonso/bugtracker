@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.forms.models import model_to_dict
 from bugtracker.models import BugHunter, Ticket
 from bugtracker.forms import FileTicketForm, LoginForm
 
@@ -46,7 +47,7 @@ def file_view(request):
         form = FileTicketForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            filer = BugHunter.objects.filter(username=request.user.username).first()
+            filer = BugHunter.objects.get(username=request.user.username)
             ticket = Ticket.objects.create(
                 title=data["title"], description=data["description"], filed_by=filer
             )
@@ -63,7 +64,7 @@ def file_view(request):
 @login_required
 def ticket_view(request, id):
     if request.method == "POST":
-        current_ticket = Ticket.objects.filter(id=id).first()
+        current_ticket = Ticket.objects.get(id=id)
         print(request.POST.keys())
         if "assign" in request.POST.keys():
             print("assign")
@@ -81,7 +82,7 @@ def ticket_view(request, id):
             current_ticket.status = "INVALID"
         current_ticket.save()
 
-    current_ticket = Ticket.objects.filter(id=id).first()
+    current_ticket = Ticket.objects.get(id=id)
     can_complete = current_ticket.assigned_to == request.user
     return render(
         request, "ticket.html", {"ticket": current_ticket, "can_complete": can_complete}
@@ -89,10 +90,30 @@ def ticket_view(request, id):
 
 
 @login_required
+def edit_view(request, id):
+    editable = Ticket.objects.get(id=id)
+    values = model_to_dict(editable)
+
+    if request.method == "POST":
+        form = FileTicketForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            editable.title = data["title"]
+            editable.description = data["description"]
+            editable.save()
+            return HttpResponseRedirect(reverse("ticket_view", args={id}))
+
+    return render(
+        request,
+        "generic_form.html",
+        {"form": FileTicketForm(initial=values)},
+    )
+
+
+@login_required
 def hunter_view(request, id):
-    hunter = BugHunter.objects.filter(id=id).first()
+    hunter = BugHunter.objects.get(id=id)
     filed = Ticket.objects.filter(filed_by=hunter)
-    print(filed)
     assigned = Ticket.objects.filter(assigned_to=hunter)
     completed = Ticket.objects.filter(completed_by=hunter)
     return render(

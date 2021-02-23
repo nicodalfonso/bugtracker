@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from bugtracker.views import (
+    edit_view,
     file_view,
     hunter_view,
     index_view,
@@ -29,7 +30,8 @@ urlpatterns = [
     path("login/", login_view, name="login_page"),
     path("logout/", logout_view, name="logout_page"),
     path("file/", file_view, name="file_page"),
-    path("tickets/<id>", ticket_view),
+    path("tickets/<id>", ticket_view, name="ticket_view"),
+    path("edit/<id>", edit_view),
     path("users/<id>", hunter_view),
     path("admin/", admin.site.urls),
 ]

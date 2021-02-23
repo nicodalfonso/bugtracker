@@ -1,6 +1,10 @@
 {% extends 'base.html' %} {% block content %}
 <div>
   <h2>{{ticket.title}}</h2>
+  <form action="/edit/{{ticket.id}}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="Edit">
+  </form>
   {% if ticket.status != "INVALID" %}
   <form action="" method="post">
     {% csrf_token %}
