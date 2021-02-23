@@ -106,7 +106,7 @@ def edit_view(request, id):
     return render(
         request,
         "generic_form.html",
-        {"form": FileTicketForm(initial=values)},
+        {"title": editable.title, "form": FileTicketForm(initial=values)},
     )
 
 
