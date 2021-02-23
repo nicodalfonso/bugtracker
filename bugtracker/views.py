@@ -62,6 +62,12 @@ def file_view(request):
 
 @login_required
 def ticket_view(request, id):
+    if request.method == "POST":
+        current_ticket = Ticket.objects.filter(id=id).first()
+        current_ticket.assigned_to = request.user
+        current_ticket.status = "IN_PROGRESS"
+        current_ticket.save()
+
     return render(
         request, "ticket.html", {"ticket": Ticket.objects.filter(id=id).first()}
     )
