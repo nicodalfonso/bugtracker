@@ -1,12 +1,20 @@
 {% extends 'base.html' %} {% block content %}
-<h2>{{ticket.title}}</h2>
+<div>
+  <h2>{{ticket.title}}</h2>
+  {% if ticket.status != "INVALID" %}
+  <form action="" method="post">
+    {% csrf_token %}
+    <input type="submit" name="invalid" value="Invalidate" />
+  </form>
+  {% endif %}
+</div>
 <h3>{{ticket.status}}</h3>
 
 <p>Created by: <a href="/users/{{ticket.filed_by.id}}">{{ticket.filed_by}}</a></p>
 
 {% if ticket.assigned_to %}
 <a>Assigned to: <a href="/users/{{ticket.assigned_to.id}}">{{ticket.assigned_to}}</a></p>
-{% elif not ticket.status == "DONE" %}
+{% elif ticket.status != "DONE" and ticket.status != "INVALID" %}
 <form action="" method="post">
   {% csrf_token %}
   <input type="submit" name="assign" value="Claim Ticket" />
@@ -18,8 +26,10 @@
 {% elif can_complete %}
 <form action="" method="post">
   {% csrf_token %}
-  <input type="submit" name="complete" value="Complete Ticket">
+  <input type="submit" name="complete" value="Complete Ticket" />
 </form>
+{% elif ticket.status == "INVALID" %}
+<p>Ticket unable to be completed</p>
 {% else %}
 <p>Not yet completed</p>
 {% endif %}

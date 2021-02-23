@@ -66,14 +66,20 @@ def ticket_view(request, id):
         current_ticket = Ticket.objects.filter(id=id).first()
         print(request.POST.keys())
         if "assign" in request.POST.keys():
+            print("assign")
             current_ticket.assigned_to = request.user
             current_ticket.status = "IN_PROGRESS"
-            current_ticket.save()
         elif "complete" in request.POST.keys():
+            print("complete")
             current_ticket.assigned_to = None
             current_ticket.completed_by = request.user
             current_ticket.status = "DONE"
-            current_ticket.save()
+        elif "invalid" in request.POST.keys():
+            print("invalid")
+            current_ticket.assigned_to = None
+            current_ticket.completed_by = None
+            current_ticket.status = "INVALID"
+        current_ticket.save()
 
     current_ticket = Ticket.objects.filter(id=id).first()
     can_complete = current_ticket.assigned_to == request.user
