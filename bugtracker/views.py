@@ -64,12 +64,20 @@ def file_view(request):
 def ticket_view(request, id):
     if request.method == "POST":
         current_ticket = Ticket.objects.filter(id=id).first()
-        current_ticket.assigned_to = request.user
-        current_ticket.status = "IN_PROGRESS"
-        current_ticket.save()
+        print(request.POST.keys())
+        if "assign" in request.POST.keys():
+            current_ticket.assigned_to = request.user
+            current_ticket.status = "IN_PROGRESS"
+            current_ticket.save()
+        elif "complete" in request.POST.keys():
+            current_ticket.completed_by = request.user
+            current_ticket.status = "DONE"
+            current_ticket.save()
 
+    current_ticket = Ticket.objects.filter(id=id).first()
+    can_complete = current_ticket.assigned_to == request.user
     return render(
-        request, "ticket.html", {"ticket": Ticket.objects.filter(id=id).first()}
+        request, "ticket.html", {"ticket": current_ticket, "can_complete": can_complete}
     )
 
 
