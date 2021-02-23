@@ -1,30 +1,107 @@
 {% extends 'base.html' %} {% block content %}
-<h2>Tickets</h2>
+<h1 class="title has-text-centered">Tickets</h1>
 
-<div>
-  <h3>New</h3>
-  <ul>
+<label for="newTickets" class="label has-text-centered">NEW</label>
+<table id="newTickets" class="table is-striped is-fullwidth is-hoverable">
+  <thead>
+    <tr class="has-background-info">
+      <th><div style="width: 30vw" class="has-text-white">Title</div></th>
+      <th><div style="width: 20vw" class="has-text-white">Filed By</div></th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr class="has-background-info">
+      <th><div style="width: 30vw" class="has-text-white">Title</div></th>
+      <th><div style="width: 20vw" class="has-text-white">Filed By</div></th>
+    </tr>
+  </tfoot>
+  <tbody>
     {% for ticket in tickets.NEW %}
-    <li><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></li>
+    <tr>
+      <td>
+        <strong><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></strong>
+      </td>
+      <td><a href="/users/{{ticket.filed_by.id}}">{{ticket.filed_by}}</a></td>
+    </tr>
     {% endfor %}
-  </ul>
-</div>
-<div>
-  <h3>In Progress</h3>
-  {% for ticket in tickets.IN_PROGRESS %}
-  <li><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></li>
-  {% endfor %}
-</div>
-<div>
-  <h3>Done</h3>
-  {% for ticket in tickets.DONE %}
-  <li><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></li>
-  {% endfor %}
-</div>
-<div>
-  <h3>Invalid</h3>
-  {% for ticket in tickets.INVALID %}
-  <li><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></li>
-  {% endfor %}
-</div>
+  </tbody>
+</table>
+
+<label for="ipTickets" class="label has-text-centered">IN PROGRESS</label>
+<table id="ipTickets" class="table is-striped is-fullwidth is-hoverable">
+  <thead>
+    <tr class="is-selected">
+      <th><div style="width: 30vw">Title</div></th>
+      <th><div style="width: 20vw">Assigned To</div></th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr class="is-selected">
+      <th><div style="width: 30vw">Title</div></th>
+      <th><div style="width: 20vw">Assigned To</div></th>
+    </tr>
+  </tfoot>
+  <tbody>
+    {% for ticket in tickets.IN_PROGRESS %}
+    <tr>
+      <td>
+        <strong><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></strong>
+      </td>
+      <td><a href="/users/{{ticket.assigned_to.id}}">{{ticket.assigned_to}}</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<label for="doneTickets" class="label has-text-centered">COMPLETED</label>
+<table id="doneTickets" class="table is-striped is-fullwidth is-hoverable">
+  <thead>
+    <tr class="has-background-success-dark">
+      <th><div style="width: 30vw" class="has-text-white">Title</div></th>
+      <th><div style="width: 20vw" class="has-text-white">Completed By</div></th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr class="has-background-success-dark">
+      <th><div style="width: 30vw" class="has-text-white">Title</div></th>
+      <th><div style="width: 20vw" class="has-text-white">Completed By</div></th>
+    </tr>
+  </tfoot>
+  <tbody>
+    {% for ticket in tickets.DONE %}
+    <tr>
+      <td>
+        <strong><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></strong>
+      </td>
+      <td><a href="/users/{{ticket.completed_by.id}}">{{ticket.completed_by}}</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<label for="invalidTickets" class="label has-text-centered">INVALID</label>
+<table id="invalidTickets" class="table is-striped is-fullwidth is-hoverable">
+  <thead>
+    <tr class="has-background-danger">
+      <th><div style="width: 30vw" class="has-text-white">Title</div></th>
+      <th><div style="width: 20vw" class="has-text-white">Filed By</div></th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr class="has-background-danger">
+      <th><div style="width: 30vw" class="has-text-white">Title</div></th>
+      <th><div style="width: 20vw" class="has-text-white">Filed By</div></th>
+    </tr>
+  </tfoot>
+  <tbody>
+    {% for ticket in tickets.INVALID %}
+    <tr>
+      <td>
+        <strong><a href="/tickets/{{ticket.id}}">{{ticket.title}}</a></strong>
+      </td>
+      <td><a href="/users/{{ticket.filed_by.id}}">{{ticket.filed_by}}</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
