@@ -122,8 +122,5 @@ def hunter_view(request, id):
         {
             "hunter": hunter,
             "all": {*filed, *assigned, *completed},
-            "filed": filed,
-            "assigned": assigned,
-            "completed": completed,
         },
     )
