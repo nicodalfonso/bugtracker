@@ -1,0 +1,61 @@
+{% extends 'base.html' %} {% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2 class="title card-header-title">{{ticket.title}}</h2>
+  </div>
+
+  <div class="card-content">
+    <h3 class="subtitle">{{ticket.status}}</h3>
+
+    <section class="section level">
+      <div class="has-text-centered">
+        <label for="filer" class="label">Filed By</label>
+        <a href="/users/{{ticket.filed_by.id}}" name="filer">{{ticket.filed_by}}</a>
+      </div>
+
+      {% if ticket.assigned_to %}
+      <div class="has-text-centered">
+        <label for="assignee" class="label">Assigned To</label>
+        <a href="/users/{{ticket.assigned_to.id}}" name="assignee">{{ticket.assigned_to}}</a>
+      </div>
+      {% elif ticket.status != "DONE" and ticket.status != "INVALID" %}
+      <form action="" method="post">
+        {% csrf_token %}
+        <input type="submit" name="assign" value="Claim Ticket" />
+      </form>
+      {% endif %} {% if ticket.completed_by %}
+      <div class="has-text-centered">
+        <label for="assignee" class="label">Completed By</label>
+        <a href="/users/{{ticket.completed_by.id}}">{{ticket.completed_by}}</a>
+      </div>
+      {% elif can_complete %}
+      <form action="" method="post">
+        {% csrf_token %}
+        <input type="submit" name="complete" value="Complete Ticket" />
+      </form>
+      {% elif ticket.status == "INVALID" %}
+      <div class="has-text-centered">Ticket unable to be completed</div>
+      {% else %}
+      <div class="has-text-centered">Not yet completed</div>
+      {% endif %}
+    </section>
+
+    <label for="description" class="label">Details</label>
+    <div name="description">{{ticket.description}}</div>
+  </div>
+
+  <div class="card-footer">
+    <form action="/edit/{{ticket.id}}" method="post" class="card-footer-item">
+      {% csrf_token %}
+      <input type="submit" value="Edit" class="card-footer-item" />
+    </form>
+    {% if ticket.status != "INVALID" %}
+    <form action="" method="post" class="card-footer-item">
+      {% csrf_token %}
+      <input type="submit" name="invalid" value="Invalidate" class="card-footer-item has-background-danger has-text-white" />
+    </form>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
